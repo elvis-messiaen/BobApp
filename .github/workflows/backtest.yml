@@ -1,0 +1,37 @@
+name: Lancement des tests backend en Java avec couverture
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérification du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configuration de JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Construction avec Maven
+        run: |
+          cd back
+          mvn clean install
+
+      - name: Exécution des tests avec JaCoCo
+        run: |
+          cd back
+          mvn test jacoco:report
+
+      - name: Stockage du rapport JaCoCo
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: back/target/site/jacoco
