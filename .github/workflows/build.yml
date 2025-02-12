@@ -40,6 +40,10 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd back
-          mvn -B -f pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.0.0.4389:sonar -Dsonar.projectKey=BobAppBackend -Dsonar.projectName='BobAppBackend' -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.0.0.4389:sonar \
+            -Dsonar.projectKey=BobAppBackend \
+            -Dsonar.projectName='BobAppBackend' \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONARQUBE_BACKEND_TOKEN }}
 
           
