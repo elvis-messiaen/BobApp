@@ -45,5 +45,3 @@ jobs:
             -Dsonar.projectName='BobAppBackend' \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONARQUBE_BACKEND_TOKEN }}
-
-          
