@@ -1,0 +1,51 @@
+name: Build and Analyze Frontend
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and analyze frontend
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: front/package-lock.json
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd front
+          npm install --legacy-peer-deps
+
+      - name: Test connectivity to SonarQube
+        run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Analyze with SonarQube
+        env:
+          SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          cd front
+          npx sonar-scanner \
+            -Dsonar.projectKey=BobAppFrontend \
+            -Dsonar.projectName='BobAppFrontend' \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
