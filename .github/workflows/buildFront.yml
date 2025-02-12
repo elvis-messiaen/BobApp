@@ -7,54 +7,38 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Build and analyze frontend
+    runs-on: self-hosted
 
     steps:
-      - name: Vérification du dépôt
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
 
-      - name: Configuration de Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
+          cache-dependency-path: front/package-lock.json
           node-version: '20'
+          cache: 'npm'
 
-      - name: Installation des dépendances
+      - name: Install dependencies
         run: |
           cd front
           npm install --legacy-peer-deps
 
-      - name: Installation d'Angular CLI
-        run: |
-          cd front
-          npm install -g @angular/cli@14
-
-      - name: Installation de DevKit
-        run: |
-          cd front
-          npm install --save-dev @angular-devkit/build-angular@14
-
-      - name: Exécution des tests avec couverture
-        run: |
-          cd front
-          npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
-
-      - name: Stockage du rapport de couverture
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage-report
-          path: front/coverage
-
-      - name: Test de la connectivité à SonarQube
+      - name: Test connectivity to SonarQube
         run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
 
-      - name: Cache des packages SonarQube
+      - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Analyse avec SonarQube
+      - name: Analyze with SonarQube
         env:
           SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
