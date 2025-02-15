@@ -31,13 +31,16 @@ jobs:
           docker build -t elvis1971/bobapp-back .
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        run: echo $DOCKER_HUB_ACCESS_TOKEN | docker login --username $DOCKER_HUB_USERNAME --password-stdin
 
       - name: Push Docker image to Docker Hub
-        run: docker push bobapp-back
+        run: docker push elvis1971/bobapp-back
 
       - name: Run container
-        run: docker run -p 8080:8080 --name bobapp-back -d bobapp-back
+        run: docker run -p 8080:8080 --name bobapp-back -d elvis1971/bobapp-back
 
       - name: Add summary
         run: |
@@ -56,4 +59,3 @@ jobs:
           echo '- Collez votre token' >> $GITHUB_STEP_SUMMARY
           echo '- Faites la même chose pour : DOCKER_HUB_USERNAME' >> $GITHUB_STEP_SUMMARY
           echo '- Le nom est celui de votre compte Docker. Cliquez sur l'icône profil en haut à droite pour le voir' >> $GITHUB_STEP_SUMMARY
-
