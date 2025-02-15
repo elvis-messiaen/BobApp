@@ -1,0 +1,56 @@
+name: Java CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Build Docker image
+        run: docker build -t bobapp-back .
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Push Docker image to Docker Hub
+        run: docker push bobapp-back
+
+      - name: Run container
+        run: docker run -p 8080:8080 --name bobapp-back -d bobapp-back
+      - name: guid sercret
+        run: echo $GITHUB_STEP_SUMMARY
+      - run: |
+            echo '# Création de secrets : DOCKER_HUB_ACCESS_TOKEN' >> $GITHUB_STEP_SUMMARY
+            echo 'Préembule : Se connecter sur son Docker' >> $GITHUB_STEP_SUMMARY
+            echo '## https://login.docker.com' >> $GITHUB_STEP_SUMMARY
+            echo 'Cliquez sur votre nom d'utilisateur en haut à droite et sélectionnez "Account Settings"' >> $GITHUB_STEP_SUMMARY
+            echo '' >> $GITHUB_STEP_SUMMARY
+            echo '- Personal access tokens, cliquez sur "New Access Token' >> $GITHUB_STEP_SUMMARY
+            echo '- Donnez un nom à votre token (par exemple, "GitHub Actions Backend")' >> $GITHUB_STEP_SUMMARY
+            echo '- Choissez la durée et les permissions et cliquez sur Generate' >> $GITHUB_STEP_SUMMARY
+            echo '- Copiez votre token' >> $GITHUB_STEP_SUMMARY
+            echo 'rendez vosu sur Github, dans le repository du projet' >> $GITHUB_STEP_SUMMARY
+            echo '- Cliquez sur "Settings" puis "Secrets"' >> $GITHUB_STEP_SUMMARY
+            echo '- Cliquez sur "New repository secret"' >> $GITHUB_STEP_SUMMARY
+            echo '- Nommez votre secret
+            echo '- Collez votre token
+            echo '- Faite la même chose pour : DOCKER_HUB_USERNAME ' >> DOCKER_HUB_USERNAME
+            echo '- Le nom est celui de votre compte docker. Cliquez la souris sur l'icone profil en haut à droite ' >> $GITHUB_STEP_SUMMARY
+  
