@@ -44,18 +44,18 @@ jobs:
 
       - name: Add summary
         run: |
-          echo '# Création de secrets : DOCKER_HUB_ACCESS_TOKEN' >> $GITHUB_STEP_SUMMARY
-          echo 'Préambule : Se connecter sur son Docker' >> $GITHUB_STEP_SUMMARY
-          echo '## https://login.docker.com' >> $GITHUB_STEP_SUMMARY
-          echo 'Cliquez sur votre nom d'utilisateur en haut à droite et sélectionnez "Account Settings"' >> $GITHUB_STEP_SUMMARY
-          echo '- Personal access tokens, cliquez sur "New Access Token"' >> $GITHUB_STEP_SUMMARY
-          echo '- Donnez un nom à votre token (par exemple, "GitHub Actions Backend")' >> $GITHUB_STEP_SUMMARY
-          echo '- Choisissez la durée et les permissions et cliquez sur "Generate"' >> $GITHUB_STEP_SUMMARY
-          echo '- Copiez votre token' >> $GITHUB_STEP_SUMMARY
-          echo 'Rendez-vous sur GitHub, dans le repository du projet' >> $GITHUB_STEP_SUMMARY
-          echo '- Cliquez sur "Settings" puis "Secrets"' >> $GITHUB_STEP_SUMMARY
-          echo '- Cliquez sur "New repository secret"' >> $GITHUB_STEP_SUMMARY
-          echo '- Nommez votre secret "DOCKER_HUB_ACCESS_TOKEN"' >> $GITHUB_STEP_SUMMARY
-          echo '- Collez votre token' >> $GITHUB_STEP_SUMMARY
-          echo '- Faites la même chose pour : DOCKER_HUB_USERNAME' >> $GITHUB_STEP_SUMMARY
-          echo '- Le nom est celui de votre compte Docker. Cliquez sur l'icône profil en haut à droite pour le voir' >> $GITHUB_STEP_SUMMARY
+          echo "# Création de secrets : DOCKER_HUB_ACCESS_TOKEN" >> $GITHUB_STEP_SUMMARY
+          echo "Préambule : Se connecter sur son Docker" >> $GITHUB_STEP_SUMMARY
+          echo "## https://login.docker.com" >> $GITHUB_STEP_SUMMARY
+          echo "Cliquez sur votre nom d'utilisateur en haut à droite et sélectionnez \"Account Settings\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Personal access tokens, cliquez sur \"New Access Token\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Donnez un nom à votre token (par exemple, \"GitHub Actions Backend\")" >> $GITHUB_STEP_SUMMARY
+          echo "- Choisissez la durée et les permissions et cliquez sur \"Generate\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Copiez votre token" >> $GITHUB_STEP_SUMMARY
+          echo "Rendez-vous sur GitHub, dans le repository du projet" >> $GITHUB_STEP_SUMMARY
+          echo "- Cliquez sur \"Settings\" puis \"Secrets\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Cliquez sur \"New repository secret\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Nommez votre secret \"DOCKER_HUB_ACCESS_TOKEN\"" >> $GITHUB_STEP_SUMMARY
+          echo "- Collez votre token" >> $GITHUB_STEP_SUMMARY
+          echo "- Faites la même chose pour : DOCKER_HUB_USERNAME" >> $GITHUB_STEP_SUMMARY
+          echo "- Le nom est celui de votre compte Docker. Cliquez sur l'icône profil en haut à droite pour le voir" >> $GITHUB_STEP_SUMMARY
