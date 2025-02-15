@@ -28,7 +28,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd back
-          docker build -t bobapp-back .
+          docker build -t elvis1971/bobapp-back .
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
