@@ -2,5 +2,5 @@ projectKey=BobAppFrontend
 serverUrl=http://192.168.1.139:9000
 serverVersion=24.12.0.100206
 dashboardUrl=http://192.168.1.139:9000/dashboard?id=BobAppFrontend
-ceTaskId=e63ff241-3b1a-4ee2-8f8c-77aaf03126d5
-ceTaskUrl=http://192.168.1.139:9000/api/ce/task?id=e63ff241-3b1a-4ee2-8f8c-77aaf03126d5
+ceTaskId=c019017d-7567-456b-9b14-bd1c68db55c1
+ceTaskUrl=http://192.168.1.139:9000/api/ce/task?id=c019017d-7567-456b-9b14-bd1c68db55c1
