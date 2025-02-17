@@ -1,0 +1,42 @@
+name: Angular CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          cd front
+          npm install
+
+      - name: Build project
+        run: |
+          cd front
+          npm run build
+
+      - name: Build Docker image
+        run: docker build -t bobapp-front .
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Push Docker image to Docker Hub
+        run: docker push bobapp-front
+
+      - name: Run container
+        run: docker run -p 81:81 --name bobapp-front -d bobapp-front
