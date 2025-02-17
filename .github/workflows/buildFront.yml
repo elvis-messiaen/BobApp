@@ -49,3 +49,6 @@ jobs:
             -Dsonar.projectName='BobAppFrontend' \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
+
+
+            
