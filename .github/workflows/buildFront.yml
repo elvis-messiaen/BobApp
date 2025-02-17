@@ -1,4 +1,4 @@
-name: Build and Analyze Frontend
+name: Build and Analyze Frontend SonarQube
 
 on:
   pull_request:
