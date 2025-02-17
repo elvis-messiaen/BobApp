@@ -55,3 +55,5 @@ Build the container:
 Start the container:
 
 > docker run -p 8080:8080 --name bobapp-back -d bobapp-back 
+> Depuis cd front /
+> npx sonar-scanner -Dsonar.projectKey=BobAppFrontend -Dsonar.projectName='BobAppFrontend' -Dsonar.host.url=http://192.168.1.139:9000 -Dsonar.login=sqp_eb89896cb93be16e12ea169aef23c4856bf294b9
