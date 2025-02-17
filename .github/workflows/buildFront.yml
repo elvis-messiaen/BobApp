@@ -27,9 +27,13 @@ jobs:
         run: |
           cd front
           npm install --legacy-peer-deps
+      
+      - name: Test SonarQube token
+        run: echo ${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
 
-      - name: Test connectivity to SonarQube
-        run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
+      - name: Test SonarQube connection
+        run: |
+          curl -v "${{ secrets.SONAR_HOST_URL }}/api/system/status" --header "Authorization: Bearer ${{ secrets.SONARQUBE_FRONTEND_TOKEN }}"
 
       - name: Cache SonarQube packages
         uses: actions/cache@v4
@@ -44,9 +48,8 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd front
-          npx sonar-scanner \
+          npx sonar-scanner -X \
             -Dsonar.projectKey=BobAppFrontend \
             -Dsonar.projectName='BobAppFrontend' \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONARQUBE_FRONTEND_TOKEN }}
-            
