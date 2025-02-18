@@ -34,7 +34,7 @@ jobs:
           npm run build
 
       - name: Build Docker image
-        run: docker build -t bobapp-front -f projet/front/Dockerfile projet/front
+        run: docker build -t bobapp-front -f projet/front/Dockerfile front
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
