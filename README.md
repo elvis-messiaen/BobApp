@@ -325,6 +325,97 @@ Une fois connecté à l'interface de SonarQube :
 - **Corriger les bugs critiques** : Si SonarQube détecte des bugs ou vulnérabilités critiques, il est essentiel de les résoudre pour garantir la stabilité et la sécurité de l'application.
 
 
+# Workflow GitHub Action : Java CI/CD avec Docker
+
+## Description
+Ce workflow CI/CD pour GitHub Actions est utilisé pour :
+1. **Construire l'application Java** avec Maven.
+2. **Créer une image Docker** du backend Java.
+3. **Se connecter à Docker Hub**.
+4. **Pousser l'image Docker vers Docker Hub**.
+5. **Exécuter un conteneur Docker** à partir de l'image construite.
+
+### Déclenchement
+Le workflow est déclenché sur un **push vers la branche `main`**.
+
+## Étapes du workflow
+
+### 1. **Checkout du code**
+   - **Action utilisée** : `actions/checkout@v2`
+   - **Objectif** : Récupérer le code du repository afin d'exécuter les étapes suivantes.
+
+### 2. **Configuration de JDK 11**
+   - **Action utilisée** : `actions/setup-java@v2`
+   - **Objectif** : Installer JDK 11 pour la construction de l'application Java.
+   - **Distribution** : Utilisation de la distribution `adopt` de JDK.
+
+### 3. **Construction du projet avec Maven**
+   - **Commande** : `mvn clean install`
+   - **Objectif** : Compiler et construire le projet Java.
+
+### 4. **Création de l'image Docker**
+   - **Commande** : `docker build -t elvis1971/bobapp-back .`
+   - **Objectif** : Créer une image Docker à partir du Dockerfile dans le répertoire `back`.
+   - Le tag `elvis1971/bobapp-back` est utilisé pour nommer l'image Docker.
+
+### 5. **Connexion à Docker Hub**
+   - **Commande** : `docker login --username $DOCKER_HUB_USERNAME --password-stdin`
+   - **Objectif** : Se connecter à Docker Hub en utilisant les secrets GitHub définis (`DOCKER_HUB_USERNAME` et `DOCKER_HUB_ACCESS_TOKEN`).
+   - Ces secrets sont stockés dans GitHub Secrets pour assurer la sécurité.
+
+### 6. **Pousser l'image vers Docker Hub**
+   - **Commande** : `docker push elvis1971/bobapp-back`
+   - **Objectif** : Pousser l'image Docker créée sur Docker Hub pour la rendre accessible publiquement ou dans ton compte privé.
+
+### 7. **Exécution du conteneur Docker**
+   - **Commande** : `docker run -p 8080:8080 --name bobapp-back -d elvis1971/bobapp-back`
+   - **Objectif** : Lancer le conteneur Docker en arrière-plan en exposant le port 8080.
+   - Le nom du conteneur est `bobapp-back`.
+
+### 8. **Ajout d'un résumé des actions à GitHub**
+   - **Commande** : Ajout d'un résumé détaillant la procédure de création du token Docker et son ajout dans GitHub Secrets.
+   - **Objectif** : Afficher un résumé dans l'interface GitHub pour guider l'utilisateur sur la création des secrets nécessaires.
+
+## Configuration du Repository Docker Hub et des Secrets GitHub
+
+### 1. **Création du repository sur Docker Hub**
+   - Connecte-toi à [Docker Hub](https://hub.docker.com/).
+   - Crée un nouveau repository :
+     - Dans l'interface de Docker Hub, clique sur **"Create Repository"**.
+     - Donne un nom à ton repository, par exemple `bobapp-back`.
+     - Choisis si tu veux que ton repository soit public ou privé.
+     - Clique sur **"Create"** pour terminer.
+
+### 2. **Création du Token Docker Hub**
+   - Accède à [Docker Hub Login](https://login.docker.com).
+   - Clique sur ton nom d'utilisateur en haut à droite et sélectionne **"Account Settings"**.
+   - Dans l'onglet **"Security"**, sous **Personal Access Tokens**, clique sur **"New Access Token"**.
+   - Donne un nom à ton token, par exemple `"GitHub Actions Backend"`.
+   - Choisis la durée de validité et les permissions nécessaires (par exemple, "write" pour permettre l'envoi d'images).
+   - Clique sur **"Generate"**.
+   - Copie ton token, car tu ne pourras plus le voir une fois la fenêtre fermée.
+
+### 3. **Ajouter les Secrets Docker dans GitHub**
+   - Accède à ton repository sur GitHub.
+   - Clique sur **Settings** (paramètres).
+   - Dans la barre latérale, sélectionne **Secrets** puis **New repository secret**.
+   - Ajoute un secret appelé `DOCKER_HUB_USERNAME` avec la valeur de ton nom d'utilisateur Docker Hub.
+   - Ajoute également un autre secret appelé `DOCKER_HUB_ACCESS_TOKEN` avec le token que tu as créé sur Docker Hub.
+
+### 4. **Vérification de la configuration**
+   - Après avoir configuré les secrets et créé le repository Docker Hub, assure-toi que le workflow GitHub Action fonctionne correctement.
+   - Vérifie que l'image Docker est bien poussée vers ton repository Docker Hub et que le conteneur s'exécute correctement.
+
+## Résultats Attendus
+1. **Image Docker sur Docker Hub** : Après l'exécution du workflow, l'image Docker de ton backend Java sera disponible sur Docker Hub sous le nom `elvis1971/bobapp-back`.
+   
+2. **Conteneur Docker en exécution** : Le conteneur sera lancé sur le port 8080, accessible via le nom de l'image.
+
+3. **Résumé GitHub** : Un résumé détaillant la procédure de création des secrets Docker sera ajouté à la section **GitHub Actions summary**.
+
+### Remarques
+- N'oublie pas de garder tes **secrets Docker Hub** confidentiels.
+- Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions.
 
 
 
