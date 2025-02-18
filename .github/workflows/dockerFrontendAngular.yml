@@ -34,10 +34,10 @@ jobs:
           npm run build
 
       - name: Build Docker image
-        run: docker build -t elvis1971/bobapp-front .
+        run: docker build -t elvis1971/bobapp-front -f front/Dockerfile front
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN_FRONTEND }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN_FRONTEND }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME_FRONT }} --password-stdin
 
       - name: Push Docker image to Docker Hub
         run: docker push bobapp-front
