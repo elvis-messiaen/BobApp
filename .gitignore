@@ -39,3 +39,11 @@ build/
 .mvn
 
 .angular
+
+# Exclusion des fichiers volumineux de GitHub Actions Runner
+actions-runner/
+actions-runner/_work/
+actions-runner/_tool/
+actions-runner/_temp/
+actions-runner/_diag/
+actions-runner/_externals/
