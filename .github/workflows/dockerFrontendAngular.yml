@@ -43,5 +43,10 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push elvis1971/bobapp-front
 
+      - name: Stop and remove existing container
+        run: |
+          docker stop bobapp-front || true
+          docker rm bobapp-front || true
+
       - name: Run container
         run: docker run -p 81:81 --name bobapp-front -d elvis1971/bobapp-front
