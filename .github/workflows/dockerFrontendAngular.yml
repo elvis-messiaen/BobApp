@@ -8,25 +8,29 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          cache-dependency-path: front/package-lock.json
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
-          cd projet/front
+          cd front
           npm install
 
       - name: Build project
         run: |
-          cd projet/front
+          cd front
           npm run build
 
       - name: Build Docker image
