@@ -21,16 +21,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd front
+          cd projet/front
           npm install
 
       - name: Build project
         run: |
-          cd front
+          cd projet/front
           npm run build
 
       - name: Build Docker image
-        run: docker build -t bobapp-front .
+        run: docker build -t bobapp-front -f projet/front/Dockerfile projet/front
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
