@@ -37,10 +37,11 @@ jobs:
         run: docker build -t elvis1971/bobapp-front -f front/Dockerfile front
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN_FRONTEND }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME_FRONT }} --password-stdin
+        run: |
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN_FRONTEND }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Push Docker image to Docker Hub
-        run: docker push bobapp-front
+        run: docker push elvis1971/bobapp-front
 
       - name: Run container
-        run: docker run -p 81:81 --name bobapp-front -d bobapp-front
+        run: docker run -p 81:81 --name bobapp-front -d elvis1971/bobapp-front
