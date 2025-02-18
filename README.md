@@ -243,6 +243,86 @@ Une fois connecté à l'interface de SonarQube :
 - **Corriger les bugs critiques** : Si SonarQube détecte des bugs ou vulnérabilités critiques, il est essentiel de les résoudre pour garantir la stabilité et la sécurité de l'application.
 
 
+# Workflow GitHub Action : Build and Analyze Backend SonarQube
+
+## Description
+Ce workflow GitHub Action est déclenché chaque fois qu'une **pull request** est créée sur la branche `main` ou lorsqu'il est lancé manuellement via `workflow_dispatch`. Il permet de construire l'application backend et de l'analyser avec SonarQube pour détecter les problèmes de qualité du code, la couverture des tests et d'autres métriques.
+
+## Objectif
+- Construire l'application backend.
+- Analyser l'application avec SonarQube pour vérifier la qualité du code.
+- Rapporter les résultats d'analyse à l'interface SonarQube.
+
+## Étapes du workflow
+
+1. **Vérification du dépôt**
+   - **Action utilisée** : `actions/checkout@v4`
+   - **Objectif** : Récupérer le code source du repository pour l'exécution des étapes suivantes.
+
+2. **Configuration de JDK 11**
+   - **Action utilisée** : `actions/setup-java@v4`
+   - **Objectif** : Configurer JDK 11 à l'aide de la distribution `zulu`.
+
+3. **Test de connectivité avec SonarQube**
+   - **Commande** : `curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"`
+   - **Objectif** : Tester la connectivité avec le serveur SonarQube pour s'assurer que la connexion est fonctionnelle avant d'analyser le code.
+
+4. **Mise en cache des packages SonarQube**
+   - **Action utilisée** : `actions/cache@v4`
+   - **Objectif** : Mettre en cache les fichiers et dépendances SonarQube pour accélérer les exécutions futures du workflow.
+
+5. **Mise en cache des packages Maven**
+   - **Action utilisée** : `actions/cache@v4`
+   - **Objectif** : Mettre en cache les dépendances Maven pour accélérer la phase de construction des builds futurs.
+
+6. **Construction et analyse avec SonarQube**
+   - **Commande** : `mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.0.0.4389:sonar`
+   - **Objectif** : Lancer l'analyse de l'application backend avec SonarQube en spécifiant les clés du projet et l'URL du serveur SonarQube pour récupérer et analyser les métriques du code.
+   - **Environnement** : Utilisation des secrets `SONARQUBE_BACKEND_TOKEN` et `SONAR_HOST_URL` pour authentifier l'analyse.
+
+## KPIs Suivis
+
+1. **Couverture de code** : SonarQube fournit des métriques sur la couverture de code, ce qui permet de s'assurer que le code est bien testé. Il est recommandé d'avoir une couverture d'au moins 80 %.
+   
+2. **Bugs et vulnérabilités** : SonarQube analyse le code pour détecter les bugs, les vulnérabilités de sécurité et les mauvaises pratiques. L'objectif est de réduire leur nombre au minimum.
+
+## Résultats Attendus
+Après l'exécution du workflow, les résultats de l'analyse sont disponibles dans l'interface web de SonarQube. Ces résultats incluent :
+- La couverture de code.
+- La détection des bugs et vulnérabilités.
+- L'indice de qualité du code (qualité globale).
+
+### Accès aux résultats
+Les résultats de l'analyse peuvent être consultés en vous rendant sur la page du projet dans SonarQube. Par défaut, SonarQube est accessible via l'URL suivante :  
+
+**URL de SonarQube** : `http://localhost:9000`
+
+Une fois connecté à l'interface de SonarQube :
+
+1. **Connexion à SonarQube** :
+   - Ouvre un navigateur et accède à l'URL `http://localhost:9000` (si tu utilises SonarQube en local).
+   - Si tu utilises SonarQube sur un serveur distant, remplace `localhost` par l'adresse de ton serveur SonarQube.
+   - Connecte-toi avec tes identifiants.
+
+2. **Accéder au tableau de bord du projet** :
+   - Après t'être connecté à SonarQube, dans le tableau de bord principal, recherche ou accède à ton projet : **BobAppBackend**.
+   - L'URL de ton projet SonarQube sera sous la forme suivante :
+     ```
+     http://localhost:9000/dashboard?id=BobAppBackend
+     ```
+
+3. **Consulter les métriques** :
+   - Sur le tableau de bord du projet **BobAppBackend**, tu pourras voir les métriques d'analyse du code :
+     - **Couverture de code**.
+     - **Bugs et vulnérabilités**.
+     - **Code Smells**.
+     - **Complexité**.
+
+   Ces informations seront mises à jour après chaque exécution du workflow GitHub Action.
+
+## Recommandations
+- **Améliorer la couverture de code** : Si la couverture de code est en dessous du seuil minimal de 80 %, il est recommandé de rajouter des tests supplémentaires pour améliorer la couverture.
+- **Corriger les bugs critiques** : Si SonarQube détecte des bugs ou vulnérabilités critiques, il est essentiel de les résoudre pour garantir la stabilité et la sécurité de l'application.
 
 
 
