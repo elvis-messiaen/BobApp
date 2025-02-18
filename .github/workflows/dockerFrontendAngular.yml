@@ -37,7 +37,7 @@ jobs:
         run: docker build -t bobapp-front -f front/Dockerfile front
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN_FRONTEND }}" | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Push Docker image to Docker Hub
         run: docker push bobapp-front
