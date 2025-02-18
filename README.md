@@ -417,5 +417,107 @@ Le workflow est déclenché sur un **push vers la branche `main`**.
 - N'oublie pas de garder tes **secrets Docker Hub** confidentiels.
 - Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions.
 
+# Workflow GitHub Action : CI/CD Docker Frontend (Angular)
+
+## Description
+Ce workflow CI/CD pour GitHub Actions est utilisé pour :
+1. **Construire l'application Angular**.
+2. **Créer une image Docker** du frontend Angular.
+3. **Se connecter à Docker Hub**.
+4. **Pousser l'image Docker vers Docker Hub**.
+5. **Exécuter un conteneur Docker** à partir de l'image construite.
+
+### Déclenchement
+Le workflow est déclenché sur un **push vers la branche `main`**.
+
+## Étapes du workflow
+
+### 1. **Checkout du code**
+   - **Action utilisée** : `actions/checkout@v4`
+   - **Objectif** : Récupérer le code du repository afin d'exécuter les étapes suivantes.
+
+### 2. **Configuration de Node.js**
+   - **Action utilisée** : `actions/setup-node@v4`
+   - **Objectif** : Installer Node.js version 20 pour la gestion du projet Angular.
+   - **Cache** : Utilisation du cache de dépendances via le fichier `package-lock.json` pour améliorer les performances de l'installation.
+
+### 3. **Installation des dépendances**
+   - **Commande** : `npm install`
+   - **Objectif** : Installer les dépendances nécessaires au projet Angular dans le répertoire `front`.
+
+### 4. **Construction du projet Angular**
+   - **Commande** : `npm run build`
+   - **Objectif** : Compiler le projet Angular en mode production.
+
+### 5. **Création de l'image Docker**
+   - **Commande** : `docker build -t elvis1971/bobapp-front -f front/Dockerfile front`
+   - **Objectif** : Créer une image Docker à partir du Dockerfile dans le répertoire `front`.
+   - Le tag `elvis1971/bobapp-front` est utilisé pour nommer l'image Docker.
+
+### 6. **Connexion à Docker Hub**
+   - **Commande** : `docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin`
+   - **Objectif** : Se connecter à Docker Hub en utilisant les secrets GitHub définis (`DOCKER_HUB_USERNAME` et `DOCKER_HUB_ACCESS_TOKEN_FRONTEND`).
+   - Ces secrets sont stockés dans GitHub Secrets pour assurer la sécurité.
+
+### 7. **Pousser l'image vers Docker Hub**
+   - **Commande** : `docker push elvis1971/bobapp-front`
+   - **Objectif** : Pousser l'image Docker créée sur Docker Hub pour la rendre accessible publiquement ou dans ton compte privé.
+
+### 8. **Arrêter et supprimer le conteneur existant**
+   - **Commande** : 
+     ```bash
+     docker stop bobapp-front || true
+     docker rm bobapp-front || true
+     ```
+   - **Objectif** : Si un conteneur Docker avec le même nom existe déjà, l'arrêter et le supprimer.
+
+### 9. **Exécution du conteneur Docker**
+   - **Commande** : `docker run -p 81:81 --name bobapp-front -d elvis1971/bobapp-front`
+   - **Objectif** : Lancer le conteneur Docker en arrière-plan en exposant le port 81 pour l'accès au frontend.
+
+### 10. **Ajout d'un résumé des actions à GitHub**
+   - **Commande** : Ajout d'un résumé détaillant la procédure de création du token Docker et son ajout dans GitHub Secrets.
+   - **Objectif** : Afficher un résumé dans l'interface GitHub pour guider l'utilisateur sur la création des secrets nécessaires.
+
+## Configuration du Repository Docker Hub et des Secrets GitHub
+
+### 1. **Création du repository sur Docker Hub**
+   - Connecte-toi à [Docker Hub](https://hub.docker.com/).
+   - Crée un nouveau repository :
+     - Dans l'interface de Docker Hub, clique sur **"Create Repository"**.
+     - Donne un nom à ton repository, par exemple `bobapp-front`.
+     - Choisis si tu veux que ton repository soit public ou privé.
+     - Clique sur **"Create"** pour terminer.
+
+### 2. **Création du Token Docker Hub**
+   - Accède à [Docker Hub Login](https://login.docker.com).
+   - Clique sur ton nom d'utilisateur en haut à droite et sélectionne **"Account Settings"**.
+   - Dans l'onglet **"Security"**, sous **Personal Access Tokens**, clique sur **"New Access Token"**.
+   - Donne un nom à ton token, par exemple `"GitHub Actions Frontend"`.
+   - Choisis la durée de validité et les permissions nécessaires (par exemple, "write" pour permettre l'envoi d'images).
+   - Clique sur **"Generate"**.
+   - Copie ton token, car tu ne pourras plus le voir une fois la fenêtre fermée.
+
+### 3. **Ajouter les Secrets Docker dans GitHub**
+   - Accède à ton repository sur GitHub.
+   - Clique sur **Settings** (paramètres).
+   - Dans la barre latérale, sélectionne **Secrets** puis **New repository secret**.
+   - Ajoute un secret appelé `DOCKER_HUB_USERNAME` avec la valeur de ton nom d'utilisateur Docker Hub.
+   - Ajoute également un autre secret appelé `DOCKER_HUB_ACCESS_TOKEN_FRONTEND` avec le token que tu as créé sur Docker Hub.
+
+### 4. **Vérification de la configuration**
+   - Après avoir configuré les secrets et créé le repository Docker Hub, assure-toi que le workflow GitHub Action fonctionne correctement.
+   - Vérifie que l'image Docker est bien poussée vers ton repository Docker Hub et que le conteneur s'exécute correctement.
+
+## Résultats Attendus
+1. **Image Docker sur Docker Hub** : Après l'exécution du workflow, l'image Docker de ton frontend Angular sera disponible sur Docker Hub sous le nom `elvis1971/bobapp-front`.
+   
+2. **Conteneur Docker en exécution** : Le conteneur sera lancé sur le port 81, accessible via le nom de l'image.
+
+3. **Résumé GitHub** : Un résumé détaillant la procédure de création des secrets Docker sera ajouté à la section **GitHub Actions summary**.
+
+### Remarques
+- N'oublie pas de garder tes **secrets Docker Hub** confidentiels.
+- Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions.
 
 
