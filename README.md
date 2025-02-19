@@ -520,5 +520,7 @@ Le workflow est déclenché sur un **push vers la branche `main`**.
 
 ### Remarques
 - N'oublie pas de garder tes **secrets Docker Hub** confidentiels.
-- Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions.
+- Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions
+
+ajout d'une ligne
 
