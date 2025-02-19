@@ -20,20 +20,17 @@ jobs:
         with:
           java-version: 11
           distribution: 'zulu'
+          
       - name: Test connectivity to SonarQube
         run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          
       - name: Build and analyze backend
         env:
           SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_BACKEND_TOKEN }}
