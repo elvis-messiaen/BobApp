@@ -54,6 +54,7 @@ Build the container:
 
 Start the container:
 
+
 > docker run -p 8080:8080 --name bobapp-back -d bobapp-back
 
 
@@ -246,7 +247,8 @@ Une fois connecté à l'interface de SonarQube :
 # Workflow GitHub Action : Build and Analyze Backend SonarQube
 
 ## Description
-Ce workflow GitHub Action est déclenché chaque fois qu'une **pull request** est créée sur la branche `main` ou lorsqu'il est lancé manuellement via `workflow_dispatch`. Il permet de construire l'application backend et de l'analyser avec SonarQube pour détecter les problèmes de qualité du code, la couverture des tests et d'autres métriques.
+Ce workflow GitHub Action est déclenché chaque fois qu'une **pull request** est créée sur la branche `main` ou lorsqu'il est lancé manuellement via `workflow_dispatch`. 
+Il permet de construire l'application backend et de l'analyser avec SonarQube pour détecter les problèmes de qualité du code, la couverture des tests et d'autres métriques.
 
 ## Objectif
 - Construire l'application backend.
@@ -519,5 +521,4 @@ Le workflow est déclenché sur un **push vers la branche `main`**.
 ### Remarques
 - N'oublie pas de garder tes **secrets Docker Hub** confidentiels.
 - Si le repository Docker est privé, assure-toi que tes credentials Docker Hub ont les bonnes permissions.
-
 
