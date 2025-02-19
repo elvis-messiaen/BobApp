@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build and analyze backend
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v4
@@ -23,13 +23,18 @@ jobs:
           
       - name: Test connectivity to SonarQube
         run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
-
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
           
       - name: Build and analyze backend
         env:
@@ -37,7 +42,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd back
-          npx sonar-scanner \
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.0.0.4389:sonar \
             -Dsonar.projectKey=BobAppBackend \
             -Dsonar.projectName='BobAppBackend' \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
