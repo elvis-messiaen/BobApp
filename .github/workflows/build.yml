@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build and analyze backend
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v4
@@ -20,6 +20,7 @@ jobs:
         with:
           java-version: 11
           distribution: 'zulu'
+          
       - name: Test connectivity to SonarQube
         run: curl -v "${{ secrets.SONAR_HOST_URL }}/api/server/version"
       - name: Cache SonarQube packages
@@ -34,6 +35,7 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+          
       - name: Build and analyze backend
         env:
           SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_BACKEND_TOKEN }}
