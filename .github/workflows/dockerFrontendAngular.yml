@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +26,17 @@ jobs:
         run: |
           cd front
           npm install
+
+      - name: Run tests with coverage
+        run: |
+          cd front
+          npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+
+      - name: Store coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: front/coverage
 
       - name: Build project
         run: |
@@ -61,13 +71,3 @@ jobs:
           echo "- Donnez un nom à votre token (par exemple, \"GitHub Actions Frontend\")" >> $GITHUB_STEP_SUMMARY
           echo "- Choisissez la durée et les permissions et cliquez sur \"Generate\"" >> $GITHUB_STEP_SUMMARY
           echo "- Copiez votre token" >> $GITHUB_STEP_SUMMARY
-          echo "Rendez-vous sur GitHub, dans le repository du projet" >> $GITHUB_STEP_SUMMARY
-          echo "- Cliquez sur \"Settings\" puis \"Secrets\"" >> $GITHUB_STEP_SUMMARY
-          echo "- Cliquez sur \"New repository secret\"" >> $GITHUB_STEP_SUMMARY
-          echo "- Nommez votre secret \"DOCKER_HUB_ACCESS_TOKEN_FRONTEND\"" >> $GITHUB_STEP_SUMMARY
-          echo "- Collez votre token" >> $GITHUB_STEP_SUMMARY
-          echo "- Faites la même chose pour : DOCKER_HUB_USERNAME" >> $GITHUB_STEP_SUMMARY
-          echo "- Le nom est celui de votre compte Docker. Cliquez sur l'icône profil en haut à droite pour le voir" >> $GITHUB_STEP_SUMMARY
-
-          
-          
