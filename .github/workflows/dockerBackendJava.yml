@@ -25,6 +25,17 @@ jobs:
           cd back
           mvn clean install
 
+      - name: Run tests with JaCoCo
+        run: |
+          cd back
+          mvn test jacoco:report
+
+      - name: Store JaCoCo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: back/target/site/jacoco
+
       - name: Build Docker image
         run: |
           cd back
@@ -59,4 +70,3 @@ jobs:
           echo "- Collez votre token" >> $GITHUB_STEP_SUMMARY
           echo "- Faites la même chose pour : DOCKER_HUB_USERNAME" >> $GITHUB_STEP_SUMMARY
           echo "- Le nom est celui de votre compte Docker. Cliquez sur l'icône profil en haut à droite pour le voir" >> $GITHUB_STEP_SUMMARY
-          
